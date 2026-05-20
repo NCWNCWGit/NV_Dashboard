@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard 1 - NV Dashboard</title>
+  <link rel="stylesheet" href="../../shared/css/style.css">
+  <!-- Chart.js Library -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="container">
+    <h1>📊 Dashboard 1</h1>
+
+    <div class="info-box">
+      <strong>Sample Dashboard:</strong> This is the first dashboard showing sales data example.
+      Copy the template folder to create additional dashboards.
+    </div>
+
+    <h2>Sales Trend</h2>
+    <div class="chart-container">
+      <canvas id="salesChart"></canvas>
+    </div>
+
+    <h2>Category Distribution</h2>
+    <div class="chart-container">
+      <canvas id="categoryChart"></canvas>
+    </div>
+
+    <h2>Data Summary</h2>
+    <div id="dataTable"></div>
+
+  </div>
+
+  <script src="../../shared/js/utils.js"></script>
+  <script>
+    // Sample sales data
+    const salesData = [
+      { month: 'January', sales: 45000, expenses: 28000 },
+      { month: 'February', sales: 52000, expenses: 31000 },
+      { month: 'March', sales: 48000, expenses: 29500 },
+      { month: 'April', sales: 61000, expenses: 35000 },
+      { month: 'May', sales: 68000, expenses: 38000 }
+    ];
+
+    const categoryData = [
+      { category: 'Electronics', value: 35 },
+      { category: 'Furniture', value: 25 },
+      { category: 'Clothing', value: 20 },
+      { category: 'Other', value: 20 }
+    ];
+
+    // Sales Trend Chart (Line Chart)
+    const ctxSales = document.getElementById('salesChart').getContext('2d');
+    const salesChart = new Chart(ctxSales, {
+      type: 'line',
+      data: {
+        labels: salesData.map(d => d.month),
+        datasets: [
+          {
+            label: 'Sales',
+            data: salesData.map(d => d.sales),
+            borderColor: '#1a73e8',
+            backgroundColor: 'rgba(26, 115, 232, 0.1)',
+            borderWidth: 2,
+            tension: 0.4,
+            fill: true
+          },
+          {
+            label: 'Expenses',
+            data: salesData.map(d => d.expenses),
+            borderColor: '#ea4335',
+            backgroundColor: 'rgba(234, 67, 53, 0.1)',
+            borderWidth: 2,
+            tension: 0.4,
+            fill: true
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: true, position: 'top' },
+          title: { display: true, text: 'Sales vs Expenses' }
+        },
+        scales: {
+          y: { beginAtZero: true }
+        }
+      }
+    });
+
+    // Category Distribution Chart (Pie Chart)
+    const ctxCategory = document.getElementById('categoryChart').getContext('2d');
+    const categoryChart = new Chart(ctxCategory, {
+      type: 'pie',
+      data: {
+        labels: categoryData.map(d => d.category),
+        datasets: [{
+          data: categoryData.map(d => d.value),
+          backgroundColor: [
+            '#1a73e8',
+            '#ea4335',
+            '#fbbc04',
+            '#34a853'
+          ],
+          borderColor: '#fff',
+          borderWidth: 2
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: true, position: 'right' },
+          title: { display: true, text: 'Sales by Category' }
+        }
+      }
+    });
+
+    // Display table
+    document.getElementById('dataTable').innerHTML = createTable(salesData);
+  </script>
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Template - NV Dashboard</title>
+  <link rel="stylesheet" href="../../shared/css/style.css">
+  <!-- Chart.js Library -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="container">
+    <h1>📊 Dashboard Template</h1>
+
+    <div class="info-box">
+      <strong>Instructions:</strong> This is a template dashboard. Edit this file to create your dashboard.
+      Reference the data/ folder for CSV files and use the shared utilities.
+    </div>
+
+    <h2>Sample Chart</h2>
+    <div class="chart-container">
+      <canvas id="sampleChart"></canvas>
+    </div>
+
+    <h2>Data Table</h2>
+    <div id="dataTable"></div>
+
+  </div>
+
+  <script src="../../shared/js/utils.js"></script>
+  <script>
+    // Sample data (replace with your CSV data)
+    const sampleData = [
+      { name: 'January', value: 65 },
+      { name: 'February', value: 72 },
+      { name: 'March', value: 68 },
+      { name: 'April', value: 85 },
+      { name: 'May', value: 92 }
+    ];
+
+    // Create Chart
+    const ctx = document.getElementById('sampleChart').getContext('2d');
+    const chart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: sampleData.map(d => d.name),
+        datasets: [{
+          label: 'Sample Values',
+          data: sampleData.map(d => d.value),
+          backgroundColor: '#1a73e8',
+          borderColor: '#1557b0',
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            display: true,
+            position: 'top'
+          },
+          title: {
+            display: true,
+            text: 'Sample Bar Chart'
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+
+    // Display table
+    document.getElementById('dataTable').innerHTML = createTable(sampleData);
+  </script>
+</body>
+</html>

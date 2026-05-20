@@ -1,0 +1,9 @@
+{
+  "name": "nv-dashboard",
+  "version": "1.0.0",
+  "description": "Dashboard system for NV Lampang",
+  "main": "dashboards/dashboard1/index.html",
+  "keywords": ["dashboard", "csv", "visualization"],
+  "author": "NV Lampang",
+  "license": "MIT"
+}

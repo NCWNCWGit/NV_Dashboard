@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NV Price Comparison Dashboard</title>
+  <link rel="stylesheet" href="../../shared/css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin-bottom: 30px;
+    }
+
+    .metric-card {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 20px;
+      border-radius: 8px;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .metric-card.green {
+      background: linear-gradient(135deg, #34a853 0%, #1e8449 100%);
+    }
+
+    .metric-card.red {
+      background: linear-gradient(135deg, #ea4335 0%, #c5221f 100%);
+    }
+
+    .metric-card.yellow {
+      background: linear-gradient(135deg, #fbbc04 0%, #f57c00 100%);
+    }
+
+    .metric-value {
+      font-size: 28px;
+      font-weight: bold;
+      margin: 10px 0;
+    }
+
+    .metric-label {
+      font-size: 12px;
+      opacity: 0.9;
+      text-transform: uppercase;
+    }
+
+    .filters {
+      background-color: #f9f9f9;
+      padding: 15px;
+      border-radius: 4px;
+      margin-bottom: 20px;
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .filter-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .filter-group label {
+      font-weight: 600;
+      font-size: 13px;
+    }
+
+    .filter-group input,
+    .filter-group select {
+      padding: 6px 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 13px;
+    }
+
+    .confidence-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 3px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .confidence-high {
+      background-color: #c6efce;
+      color: #276221;
+    }
+
+    .confidence-medium {
+      background-color: #ffeb9c;
+      color: #664d03;
+    }
+
+    .confidence-low {
+      background-color: #d9d9d9;
+      color: #404040;
+    }
+
+    .price-highlight-cheaper {
+      background-color: #c6efce;
+      font-weight: 600;
+      color: #276221;
+    }
+
+    .price-highlight-expensive {
+      background-color: #f8cccc;
+      font-weight: 600;
+      color: #9c0006;
+    }
+
+    .warning-icon {
+      color: #ea4335;
+      font-weight: bold;
+    }
+
+    .success-icon {
+      color: #34a853;
+      font-weight: bold;
+    }
+
+    table.comparison-table {
+      font-size: 13px;
+    }
+
+    table.comparison-table td {
+      padding: 8px;
+    }
+
+    .section-title {
+      border-bottom: 3px solid #1a73e8;
+      padding-bottom: 10px;
+      margin-bottom: 15px;
+    }
+
+    .export-btn {
+      background-color: #1a73e8;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 13px;
+    }
+
+    .export-btn:hover {
+      background-color: #1557b0;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>💰 NV Lampang Price Comparison Dashboard</h1>
+    <p style="text-align: center; color: #666; margin-bottom: 20px;">
+      Competitive Price Analysis vs Makro & Lotus | <span id="dataDate"></span>
+    </p>
+
+    <!-- Key Metrics -->
+    <div style="margin-bottom: 30px;">
+      <h2 class="section-title">📊 Executive Summary</h2>
+      <div class="metrics-grid">
+        <div class="metric-card green">
+          <div class="metric-label">NV Cheapest</div>
+          <div class="metric-value" id="cheapestCount">0</div>
+          <div class="metric-label">products</div>
+        </div>
+        <div class="metric-card red">
+          <div class="metric-label">NV Most Expensive</div>
+          <div class="metric-value" id="expensiveCount">0</div>
+          <div class="metric-label">products</div>
+        </div>
+        <div class="metric-card yellow">
+          <div class="metric-label">Avg Price Gap vs Makro</div>
+          <div class="metric-value" id="makroGap">0%</div>
+          <div class="metric-label">more expensive</div>
+        </div>
+        <div class="metric-card yellow">
+          <div class="metric-label">Avg Price Gap vs Lotus</div>
+          <div class="metric-value" id="lotusGap">0%</div>
+          <div class="metric-label">more expensive</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="filters">
+      <div class="filter-group">
+        <label>Show Only:</label>
+        <select id="filterType" onchange="filterData()">
+          <option value="">All Products</option>
+          <option value="nv_cheaper">NV Cheaper ✓</option>
+          <option value="nv_expensive">NV More Expensive ⚠</option>
+          <option value="low_confidence">Low Confidence Match</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label>Min Confidence:</label>
+        <input type="range" id="confidenceFilter" min="0" max="100" value="0" onchange="filterData()" style="width: 120px;">
+        <span id="confidenceValue">0%</span>
+      </div>
+      <div class="filter-group">
+        <button class="export-btn" onclick="exportToCSV()">⬇ Export Data</button>
+      </div>
+    </div>
+
+    <!-- Price Comparison Chart -->
+    <div style="margin-bottom: 30px;">
+      <h2 class="section-title">📈 Top Products by Price Gap</h2>
+      <div class="chart-container" style="height: 400px;">
+        <canvas id="priceComparisonChart"></canvas>
+      </div>
+      <p style="font-size: 12px; color: #666; margin-top: 10px;">
+        Shows top 20 products ranked by price difference. Green = NV advantage, Red = NV disadvantage
+      </p>
+    </div>
+
+    <!-- Distribution Chart -->
+    <div style="margin-bottom: 30px;">
+      <h2 class="section-title">📊 Price Gap Distribution</h2>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+        <div class="chart-container" style="height: 300px;">
+          <canvas id="gapDistributionChart"></canvas>
+        </div>
+        <div class="chart-container" style="height: 300px;">
+          <canvas id="cheapestDistributionChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- Detailed Comparison Table -->
+    <div style="margin-bottom: 30px;">
+      <h2 class="section-title">📋 Detailed Product Comparison</h2>
+      <p style="font-size: 12px; color: #666; margin-bottom: 10px;">
+        Click column headers to sort. 🔴 = Low confidence match (verify manually)
+      </p>
+      <div style="overflow-x: auto;">
+        <table class="comparison-table" id="dataTable">
+          <thead>
+            <tr>
+              <th>Product Code</th>
+              <th>Product Name</th>
+              <th>Unit</th>
+              <th>NV ฿/unit</th>
+              <th>Makro ฿/unit</th>
+              <th>Lotus ฿/unit</th>
+              <th>Cheapest</th>
+              <th>vs Makro %</th>
+              <th>Confidence</th>
+              <th>vs Lotus %</th>
+              <th>Confidence</th>
+            </tr>
+          </thead>
+          <tbody id="dataTableBody">
+            <!-- Populated by JavaScript -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="../../shared/js/utils.js"></script>
+  <script>
+    let allData = [];
+    let filteredData = [];
+    let charts = {};
+
+    // Load CSV data
+    async function loadData() {
+      try {
+        const response = await fetch('../../data/price_comparison_20260520_143642.csv');
+        const csvText = await response.text();
+        allData = parseCSV(csvText);
+
+        if (allData.length === 0) {
+          document.getElementById('dataTableBody').innerHTML =
+            '<tr><td colspan="11">No data loaded. Please ensure CSV file is in data/ folder.</td></tr>';
+          return;
+        }
+
+        // Set date
+        document.getElementById('dataDate').textContent =
+          new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+
+        // Initialize
+        filterData();
+        updateMetrics();
+        createCharts();
+      } catch (error) {
+        console.error('Error loading data:', error);
+        document.getElementById('dataTableBody').innerHTML =
+          '<tr><td colspan="11">⚠ Error loading CSV file</td></tr>';
+      }
+    }
+
+    // Filter data
+    function filterData() {
+      const filterType = document.getElementById('filterType').value;
+      const confidenceValue = parseInt(document.getElementById('confidenceFilter').value);
+      document.getElementById('confidenceValue').textContent = confidenceValue + '%';
+
+      filteredData = allData.filter(row => {
+        const makroConf = toNumber(row['Makro Match %'] || row['makro_confidence'] || 100);
+        const lotusConf = toNumber(row['Lotus Match %'] || row['lotus_confidence'] || 100);
+        const minConf = Math.min(makroConf, lotusConf);
+
+        if (minConf < confidenceValue) return false;
+
+        if (filterType === 'nv_cheaper') {
+          return row['Cheapest'] === 'NV' || row['cheapest'] === 'NV';
+        } else if (filterType === 'nv_expensive') {
+          const cheapest = row['Cheapest'] || row['cheapest'];
+          return cheapest === 'Makro' || cheapest === 'Lotus';
+        } else if (filterType === 'low_confidence') {
+          return minConf < 80;
+        }
+        return true;
+      });
+
+      displayTable();
+      updateCharts();
+    }
+
+    // Update metrics
+    function updateMetrics() {
+      const cheapest = allData.filter(r => (r['Cheapest'] || r['cheapest']) === 'NV').length;
+      const expensive = allData.filter(r => {
+        const c = r['Cheapest'] || r['cheapest'];
+        return c === 'Makro' || c === 'Lotus';
+      }).length;
+
+      const makroGaps = allData.map(r => toNumber(r['Makro % vs NV'] || r['makro_pct_vs_nv'] || 0))
+        .filter(x => x > -50 && x < 200);
+      const lotusGaps = allData.map(r => toNumber(r['Lotus % vs NV'] || r['lotus_pct_vs_nv'] || 0))
+        .filter(x => x > -50 && x < 200);
+
+      const makroAvg = makroGaps.length > 0 ? (makroGaps.reduce((a,b)=>a+b,0) / makroGaps.length).toFixed(1) : 0;
+      const lotusAvg = lotusGaps.length > 0 ? (lotusGaps.reduce((a,b)=>a+b,0) / lotusGaps.length).toFixed(1) : 0;
+
+      document.getElementById('cheapestCount').textContent = cheapest;
+      document.getElementById('expensiveCount').textContent = expensive;
+      document.getElementById('makroGap').textContent = makroAvg + '%';
+      document.getElementById('lotusGap').textContent = lotusAvg + '%';
+    }
+
+    // Display table
+    function displayTable() {
+      const tbody = document.getElementById('dataTableBody');
+      tbody.innerHTML = '';
+
+      filteredData.slice(0, 200).forEach(row => {
+        const makroConf = toNumber(row['Makro Match %'] || row['makro_confidence'] || 100);
+        const lotusConf = toNumber(row['Lotus Match %'] || row['lotus_confidence'] || 100);
+        const cheapest = row['Cheapest'] || row['cheapest'];
+        const makroPct = toNumber(row['Makro % vs NV'] || row['makro_pct_vs_nv'] || 0);
+        const lotusPct = toNumber(row['Lotus % vs NV'] || row['lotus_pct_vs_nv'] || 0);
+
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><code>${row['Code'] || row['product_code'] || ''}</code></td>
+          <td><strong>${row['Product Name'] || row['product_name'] || ''}</strong></td>
+          <td>${row['Unit'] || row['unit'] || ''}</td>
+          <td class="price-highlight-cheaper">${formatNumber(toNumber(row['NV ฿/unit'] || row['nv_per_unit'] || 0))}</td>
+          <td>${formatNumber(toNumber(row['Makro ฿/unit'] || row['makro_per_unit'] || 0))}</td>
+          <td>${formatNumber(toNumber(row['Lotus ฿/unit'] || row['lotus_per_unit'] || 0))}</td>
+          <td><strong>${cheapest === 'NV' ? '✓ NV' : cheapest}</strong></td>
+          <td ${makroPct > 0 ? 'class="warning-icon"' : 'class="success-icon"'}>${makroPct > 0 ? '+' : ''}${makroPct.toFixed(1)}%</td>
+          <td><span class="confidence-badge ${makroConf >= 80 ? 'confidence-high' : makroConf >= 60 ? 'confidence-medium' : 'confidence-low'}">${makroConf.toFixed(0)}%</span></td>
+          <td ${lotusPct > 0 ? 'class="warning-icon"' : 'class="success-icon"'}>${lotusPct > 0 ? '+' : ''}${lotusPct.toFixed(1)}%</td>
+          <td><span class="confidence-badge ${lotusConf >= 80 ? 'confidence-high' : lotusConf >= 60 ? 'confidence-medium' : 'confidence-low'}">${lotusConf.toFixed(0)}%</span></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // Create charts
+    function createCharts() {
+      // Price Comparison Chart
+      const sorted = [...allData]
+        .map(r => ({...r, gap: Math.abs(toNumber(r['Makro % vs NV'] || r['makro_pct_vs_nv'] || 0))}))
+        .sort((a, b) => b.gap - a.gap)
+        .slice(0, 20);
+
+      const ctx1 = document.getElementById('priceComparisonChart').getContext('2d');
+      charts.comparison = new Chart(ctx1, {
+        type: 'bar',
+        data: {
+          labels: sorted.map(r => (r['Product Name'] || r['product_name'] || '').substring(0, 25)),
+          datasets: [{
+            label: 'vs Makro %',
+            data: sorted.map(r => toNumber(r['Makro % vs NV'] || r['makro_pct_vs_nv'] || 0)),
+            backgroundColor: sorted.map(r => {
+              const pct = toNumber(r['Makro % vs NV'] || r['makro_pct_vs_nv'] || 0);
+              return pct < 0 ? '#34a853' : '#ea4335';
+            }),
+            borderWidth: 0
+          }]
+        },
+        options: {
+          indexAxis: 'y',
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: { callbacks: { label: ctx => ctx.parsed.x.toFixed(1) + '%' } }
+          },
+          scales: { x: { beginAtZero: true } }
+        }
+      });
+
+      // Gap Distribution
+      const gaps = allData.map(r => toNumber(r['Makro % vs NV'] || r['makro_pct_vs_nv'] || 0));
+      const bins = { 'NV -50% to 0%': 0, '0-10%': 0, '10-30%': 0, '30%+': 0 };
+      gaps.forEach(gap => {
+        if (gap < 0) bins['NV -50% to 0%']++;
+        else if (gap <= 10) bins['0-10%']++;
+        else if (gap <= 30) bins['10-30%']++;
+        else bins['30%+']++;
+      });
+
+      const ctx2 = document.getElementById('gapDistributionChart').getContext('2d');
+      charts.distribution = new Chart(ctx2, {
+        type: 'bar',
+        data: {
+          labels: Object.keys(bins),
+          datasets: [{
+            label: 'Product Count',
+            data: Object.values(bins),
+            backgroundColor: ['#34a853', '#fbbc04', '#f57c00', '#ea4335']
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } }
+        }
+      });
+
+      // Cheapest Distribution
+      const cheapestCounts = {
+        'NV': allData.filter(r => (r['Cheapest'] || r['cheapest']) === 'NV').length,
+        'Makro': allData.filter(r => (r['Cheapest'] || r['cheapest']) === 'Makro').length,
+        'Lotus': allData.filter(r => (r['Cheapest'] || r['cheapest']) === 'Lotus').length
+      };
+
+      const ctx3 = document.getElementById('cheapestDistributionChart').getContext('2d');
+      charts.cheapest = new Chart(ctx3, {
+        type: 'doughnut',
+        data: {
+          labels: Object.keys(cheapestCounts),
+          datasets: [{
+            data: Object.values(cheapestCounts),
+            backgroundColor: ['#34a853', '#f57c00', '#ea4335']
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { position: 'bottom' },
+            tooltip: { callbacks: { label: ctx => ctx.label + ': ' + ctx.parsed + ' products' } }
+          }
+        }
+      });
+    }
+
+    // Update charts after filtering
+    function updateCharts() {
+      if (charts.comparison) {
+        charts.comparison.data.datasets[0].data =
+          filteredData.map(r => toNumber(r['Makro % vs NV'] || r['makro_pct_vs_nv'] || 0)).slice(0, 20);
+        charts.comparison.update();
+      }
+    }
+
+    // Export to CSV
+    function exportToCSV() {
+      let csv = 'Code,Product Name,Unit,NV ฿/unit,Makro ฿/unit,Lotus ฿/unit,Cheapest,vs Makro %\n';
+      filteredData.forEach(row => {
+        csv += `"${row['Code'] || row['product_code']}","${row['Product Name'] || row['product_name']}","${row['Unit'] || row['unit']}",${toNumber(row['NV ฿/unit'] || row['nv_per_unit'])},${toNumber(row['Makro ฿/unit'] || row['makro_per_unit'])},${toNumber(row['Lotus ฿/unit'] || row['lotus_per_unit'])},"${row['Cheapest'] || row['cheapest']}",${toNumber(row['Makro % vs NV'] || row['makro_pct_vs_nv'])}\n`;
+      });
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'price_comparison_export.csv';
+      a.click();
+    }
+
+    // Initialize on load
+    window.onload = loadData;
+  </script>
+</body>
+</html>

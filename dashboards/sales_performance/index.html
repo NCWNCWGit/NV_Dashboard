@@ -148,6 +148,49 @@
     table.perf-table td { padding: 9px 10px; vertical-align: middle; }
     table.perf-table th { white-space: nowrap; }
 
+    /* Multi-select dropdown */
+    .ms-container { position: relative; display: inline-block; }
+    .ms-btn {
+      padding: 6px 24px 6px 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 13px;
+      background: white;
+      cursor: pointer;
+      min-width: 130px;
+      text-align: left;
+      position: relative;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 200px;
+    }
+    .ms-btn::after { content: '▾'; position: absolute; right: 8px; top: 50%; transform: translateY(-50%); color: #888; font-size: 11px; pointer-events: none; }
+    .ms-btn.active { border-color: #1a73e8; background: #f0f7ff; color: #1a73e8; font-weight: 600; }
+    .ms-dropdown {
+      position: absolute;
+      top: calc(100% + 4px);
+      left: 0;
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+      z-index: 1000;
+      min-width: 180px;
+      max-width: 300px;
+    }
+    .ms-actions {
+      padding: 7px 10px;
+      border-bottom: 1px solid #eee;
+      display: flex;
+      gap: 10px;
+    }
+    .ms-actions button { font-size: 12px; color: #1a73e8; background: none; border: none; cursor: pointer; padding: 0; text-decoration: underline; }
+    .ms-list { max-height: 220px; overflow-y: auto; padding: 4px 0; }
+    .ms-item { display: flex; align-items: center; gap: 8px; padding: 6px 12px; cursor: pointer; font-size: 13px; user-select: none; }
+    .ms-item:hover { background: #f5f5f5; }
+    .ms-item input[type="checkbox"] { cursor: pointer; accent-color: #1a73e8; width: 14px; height: 14px; flex-shrink: 0; }
+
     @media (max-width: 768px) {
       .charts-row { grid-template-columns: 1fr; }
     }
@@ -177,15 +220,15 @@
     <div class="filters" id="filtersSection" style="display:none">
       <div class="filter-group">
         <label>Month:</label>
-        <select id="monthFilter" onchange="refreshDashboard()"></select>
+        <div id="monthFilter"></div>
       </div>
       <div class="filter-group">
         <label>Salesperson:</label>
-        <select id="repFilter" onchange="refreshDashboard()"></select>
+        <div id="repFilter"></div>
       </div>
       <div class="filter-group">
         <label>Category:</label>
-        <select id="categoryFilter" onchange="onCategoryChange()"></select>
+        <div id="categoryFilter"></div>
       </div>
       <div class="filter-group">
         <label>Product:</label>
@@ -209,8 +252,91 @@
 
   <script src="../../shared/js/utils.js"></script>
   <script>
+    class MultiSelect {
+      constructor({ containerId, placeholder, onChange }) {
+        this.el          = document.getElementById(containerId);
+        this.placeholder = placeholder;
+        this.onChange    = onChange;
+        this.items       = [];
+        this.selected    = new Set();
+        this._build();
+        document.addEventListener('click', e => { if (!this.el.contains(e.target)) this._close(); });
+      }
+
+      setItems(items) {
+        this.items = items;
+        this.selected.clear();
+        this._renderList();
+        this._updateBtn();
+      }
+
+      getSelected() { return [...this.selected]; }
+
+      _build() {
+        this.el.className = 'ms-container';
+        this.el.innerHTML = `
+          <button class="ms-btn" type="button">${this.placeholder}</button>
+          <div class="ms-dropdown" style="display:none">
+            <div class="ms-actions">
+              <button type="button" data-action="reset">Reset</button>
+              <button type="button" data-action="all">Select All</button>
+            </div>
+            <div class="ms-list"></div>
+          </div>`;
+        this.btn      = this.el.querySelector('.ms-btn');
+        this.dropdown = this.el.querySelector('.ms-dropdown');
+        this.list     = this.el.querySelector('.ms-list');
+        this.btn.addEventListener('click', e => { e.stopPropagation(); this._toggle(); });
+        this.el.querySelector('[data-action="reset"]').addEventListener('click', () => {
+          this.selected.clear();
+          this._renderList(); this._updateBtn(); this.onChange();
+        });
+        this.el.querySelector('[data-action="all"]').addEventListener('click', () => {
+          this.items.forEach(i => this.selected.add(i.value));
+          this._renderList(); this._updateBtn(); this.onChange();
+        });
+      }
+
+      _renderList() {
+        this.list.innerHTML = '';
+        this.items.forEach(item => {
+          const div = document.createElement('div');
+          div.className = 'ms-item';
+          div.innerHTML = `<input type="checkbox" ${this.selected.has(item.value) ? 'checked' : ''}><span>${item.label}</span>`;
+          div.addEventListener('click', e => {
+            const cb = div.querySelector('input');
+            if (e.target !== cb) cb.checked = !cb.checked;
+            if (cb.checked) this.selected.add(item.value);
+            else            this.selected.delete(item.value);
+            this._updateBtn(); this.onChange();
+          });
+          this.list.appendChild(div);
+        });
+      }
+
+      _updateBtn() {
+        const n = this.selected.size;
+        if (n === 0) {
+          this.btn.textContent = this.placeholder;
+          this.btn.classList.remove('active');
+        } else if (n <= 2) {
+          const labels = [...this.selected].map(v => this.items.find(i => i.value === v)?.label || v);
+          this.btn.textContent = labels.join(', ');
+          this.btn.classList.add('active');
+        } else {
+          this.btn.textContent = `${n} selected`;
+          this.btn.classList.add('active');
+        }
+      }
+
+      _toggle() { this.dropdown.style.display === 'none' ? this._open() : this._close(); }
+      _open()   { this.dropdown.style.display = 'block'; }
+      _close()  { this.dropdown.style.display = 'none'; }
+    }
+
     let allData = [];
-    let charts = {};
+    let charts  = {};
+    let monthMS, repMS, categoryMS;
     const REP_COLORS = ['#1a73e8','#34a853','#ea4335','#fbbc04','#9c27b0','#00bcd4','#ff5722','#607d8b','#e91e63','#795548'];
 
     // --- CSV upload ---
@@ -279,34 +405,27 @@
 
     function populateFilters() {
       const months = [...new Set(allData.map(r => (r['Date']||'').substring(0,7)).filter(Boolean))].sort();
-      const mSel = document.getElementById('monthFilter');
-      mSel.innerHTML = '<option value="">All Months</option>';
-      months.forEach(m => {
+      monthMS.setItems(months.map(m => {
         const d = new Date(m + '-02');
-        const label = d.toLocaleDateString('en-US', { year:'numeric', month:'long' });
-        mSel.innerHTML += `<option value="${m}">${label}</option>`;
-      });
+        return { value: m, label: d.toLocaleDateString('en-US', { year:'numeric', month:'long' }) };
+      }));
 
       const reps = [...new Set(allData.map(r => r['Salesperson']).filter(Boolean))].sort();
-      const rSel = document.getElementById('repFilter');
-      rSel.innerHTML = '<option value="">All</option>';
-      reps.forEach(r => rSel.innerHTML += `<option value="${r}">${r}</option>`);
+      repMS.setItems(reps.map(r => ({ value: r, label: r })));
 
       const cats = [...new Set(allData.map(r => r['Category']).filter(Boolean))].sort();
-      const cSel = document.getElementById('categoryFilter');
-      cSel.innerHTML = '<option value="">All Categories</option>';
-      cats.forEach(c => cSel.innerHTML += `<option value="${c}">${c}</option>`);
+      categoryMS.setItems(cats.map(c => ({ value: c, label: c })));
     }
 
     function getFiltered() {
-      const month  = document.getElementById('monthFilter').value;
-      const rep    = document.getElementById('repFilter').value;
-      const cat    = document.getElementById('categoryFilter').value;
-      const search = document.getElementById('productSearch').value.trim().toLowerCase();
+      const selMonths = monthMS.getSelected();
+      const selReps   = repMS.getSelected();
+      const selCats   = categoryMS.getSelected();
+      const search    = document.getElementById('productSearch').value.trim().toLowerCase();
       return allData.filter(row => {
-        if (month  && !(row['Date']||'').startsWith(month))   return false;
-        if (rep    && row['Salesperson'] !== rep)              return false;
-        if (cat    && row['Category'] !== cat)                 return false;
+        if (selMonths.length > 0 && !selMonths.some(m => (row['Date']||'').startsWith(m))) return false;
+        if (selReps.length   > 0 && !selReps.includes(row['Salesperson']))                 return false;
+        if (selCats.length   > 0 && !selCats.includes(row['Category']))                   return false;
         if (search) {
           const nameMatch = (row['Product']||'').toLowerCase().includes(search);
           const skuMatch  = (row['SKU']||row['Code']||row['Product_Code']||'').toLowerCase().includes(search);
@@ -314,11 +433,6 @@
         }
         return true;
       });
-    }
-
-    function onCategoryChange() {
-      document.getElementById('productSearch').value = '';
-      refreshDashboard();
     }
 
     function clearProductSearch() {
@@ -743,6 +857,11 @@
     function fmtNum(n) {
       return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
     }
+
+    // Initialise multi-selects once the DOM is ready
+    monthMS    = new MultiSelect({ containerId: 'monthFilter',    placeholder: 'All Months',     onChange: refreshDashboard });
+    repMS      = new MultiSelect({ containerId: 'repFilter',      placeholder: 'All',            onChange: refreshDashboard });
+    categoryMS = new MultiSelect({ containerId: 'categoryFilter', placeholder: 'All Categories', onChange: refreshDashboard });
   </script>
 </body>
 </html>

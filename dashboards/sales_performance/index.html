@@ -40,7 +40,12 @@
     }
     .filter-group { display: flex; align-items: center; gap: 8px; }
     .filter-group label { font-weight: 600; font-size: 13px; }
-    .filter-group select { padding: 6px 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 13px; }
+    .filter-group select,
+    .filter-group input[type="text"] { padding: 6px 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 13px; }
+    .filter-group .search-wrap { position: relative; }
+    .filter-group .search-wrap input { padding-right: 26px; }
+    .filter-group .search-clear { position: absolute; right: 6px; top: 50%; transform: translateY(-50%); cursor: pointer; color: #aaa; font-size: 14px; line-height: 1; background: none; border: none; padding: 0; }
+    .filter-group .search-clear:hover { color: #555; }
 
     .upload-section {
       background: #e8f4f8;
@@ -179,8 +184,15 @@
         <select id="repFilter" onchange="refreshDashboard()"></select>
       </div>
       <div class="filter-group">
+        <label>Category:</label>
+        <select id="categoryFilter" onchange="onCategoryChange()"></select>
+      </div>
+      <div class="filter-group">
         <label>Product:</label>
-        <select id="productFilter" onchange="refreshDashboard()"></select>
+        <div class="search-wrap">
+          <input type="text" id="productSearch" placeholder="Search name or SKU…" oninput="refreshDashboard()" style="width:200px">
+          <button class="search-clear" onclick="clearProductSearch()" title="Clear">✕</button>
+        </div>
       </div>
       <div style="margin-left:auto">
         <button class="upload-btn" onclick="exportCSV()">⬇ Export</button>
@@ -280,22 +292,38 @@
       rSel.innerHTML = '<option value="">All</option>';
       reps.forEach(r => rSel.innerHTML += `<option value="${r}">${r}</option>`);
 
-      const prods = [...new Set(allData.map(r => r['Product']).filter(Boolean))].sort();
-      const pSel = document.getElementById('productFilter');
-      pSel.innerHTML = '<option value="">All Products</option>';
-      prods.forEach(p => pSel.innerHTML += `<option value="${p}">${p}</option>`);
+      const cats = [...new Set(allData.map(r => r['Category']).filter(Boolean))].sort();
+      const cSel = document.getElementById('categoryFilter');
+      cSel.innerHTML = '<option value="">All Categories</option>';
+      cats.forEach(c => cSel.innerHTML += `<option value="${c}">${c}</option>`);
     }
 
     function getFiltered() {
-      const month = document.getElementById('monthFilter').value;
-      const rep   = document.getElementById('repFilter').value;
-      const prod  = document.getElementById('productFilter').value;
+      const month  = document.getElementById('monthFilter').value;
+      const rep    = document.getElementById('repFilter').value;
+      const cat    = document.getElementById('categoryFilter').value;
+      const search = document.getElementById('productSearch').value.trim().toLowerCase();
       return allData.filter(row => {
-        if (month && !(row['Date']||'').startsWith(month)) return false;
-        if (rep   && row['Salesperson'] !== rep)  return false;
-        if (prod  && row['Product'] !== prod)      return false;
+        if (month  && !(row['Date']||'').startsWith(month))   return false;
+        if (rep    && row['Salesperson'] !== rep)              return false;
+        if (cat    && row['Category'] !== cat)                 return false;
+        if (search) {
+          const nameMatch = (row['Product']||'').toLowerCase().includes(search);
+          const skuMatch  = (row['SKU']||row['Code']||row['Product_Code']||'').toLowerCase().includes(search);
+          if (!nameMatch && !skuMatch) return false;
+        }
         return true;
       });
+    }
+
+    function onCategoryChange() {
+      document.getElementById('productSearch').value = '';
+      refreshDashboard();
+    }
+
+    function clearProductSearch() {
+      document.getElementById('productSearch').value = '';
+      refreshDashboard();
     }
 
     // --- Data aggregation ---

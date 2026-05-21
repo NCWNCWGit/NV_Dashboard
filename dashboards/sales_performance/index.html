@@ -352,6 +352,29 @@
       return { months, reps, trend };
     }
 
+    function buildCustomerStats(data) {
+      const custs = {};
+      data.forEach(row => {
+        const cust = row['Customer']; if (!cust) return;
+        const rep     = row['Salesperson'] || '';
+        const revenue = toNumber(row['Total_Value']);
+        const qty     = toNumber(row['Quantity']);
+        const product = row['Product'] || '';
+        if (!custs[cust]) custs[cust] = { name: cust, revenue: 0, units: 0, txns: 0, reps: {}, products: {} };
+        custs[cust].revenue += revenue;
+        custs[cust].units   += qty;
+        custs[cust].txns    += 1;
+        custs[cust].reps[rep]       = (custs[cust].reps[rep]       || 0) + revenue;
+        custs[cust].products[product] = (custs[cust].products[product] || 0) + revenue;
+      });
+      return Object.values(custs).map(c => {
+        const primaryRep = Object.entries(c.reps).sort((a,b) => b[1]-a[1])[0]?.[0] || '—';
+        const allReps    = Object.keys(c.reps).sort();
+        const topProduct = Object.entries(c.products).sort((a,b) => b[1]-a[1])[0]?.[0] || '—';
+        return { name: c.name, revenue: c.revenue, units: c.units, txns: c.txns, primaryRep, allReps, topProduct };
+      }).sort((a,b) => b.revenue - a.revenue);
+    }
+
     // --- Render ---
     function refreshDashboard() {
       const filtered = getFiltered();
@@ -360,9 +383,14 @@
         destroyCharts(); return;
       }
       const repStats = buildRepStats(filtered);
+      const allRepNames = [...new Set(allData.map(r => r['Salesperson']).filter(Boolean))].sort();
+      const colorMap = {};
+      allRepNames.forEach((n, i) => colorMap[n] = REP_COLORS[i % REP_COLORS.length]);
+
       renderKPICards(repStats, filtered);
-      renderCharts(repStats, filtered);
+      renderCharts(repStats, filtered, colorMap);
       renderTable(repStats, filtered);
+      renderCustomerSection(buildCustomerStats(filtered), colorMap);
     }
 
     function destroyCharts() {
@@ -413,15 +441,14 @@
         </div>
         <div id="chartsSection"></div>
         <div id="tableSection"></div>
+        <div id="customerSection"></div>
       `;
     }
 
-    function renderCharts(repStats, data) {
+    function renderCharts(repStats, data, colorMap) {
       const section = document.getElementById('chartsSection');
       const trendData = buildMonthlyTrend(data);
       const repNames  = repStats.map(r => r.name);
-      const colorMap  = {};
-      repNames.forEach((n, i) => colorMap[n] = REP_COLORS[i % REP_COLORS.length]);
 
       section.innerHTML = `
         <h2 class="section-title">📈 Performance Charts</h2>
@@ -579,6 +606,93 @@
           </table>
         </div>
       `;
+    }
+
+    function renderCustomerSection(custStats, colorMap) {
+      const section = document.getElementById('customerSection');
+      const top = custStats.slice(0, 12);
+
+      section.innerHTML = `
+        <h2 class="section-title" style="margin-top:10px">🏪 Customer Analysis</h2>
+        <div style="margin-bottom:30px">
+          <div class="chart-panel">
+            <h3>Top ${top.length} Customers by Revenue — bar colour = primary salesperson</h3>
+            <div style="position:relative;height:${Math.max(260, top.length * 32)}px"><canvas id="chartCustomers"></canvas></div>
+          </div>
+        </div>
+        <h2 class="section-title">📋 Customer Breakdown</h2>
+        <div class="data-info">
+          ${custStats.length} active customer${custStats.length !== 1 ? 's' : ''} in the selected period
+        </div>
+        <div style="overflow-x:auto">
+          <table class="perf-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Customer</th>
+                <th>Primary Rep</th>
+                <th>Also Served By</th>
+                <th>Revenue</th>
+                <th>Transactions</th>
+                <th>Units</th>
+                <th>Top Product</th>
+              </tr>
+            </thead>
+            <tbody id="custTableBody"></tbody>
+          </table>
+        </div>
+      `;
+
+      // Horizontal bar chart — top customers
+      charts.customers = new Chart(document.getElementById('chartCustomers').getContext('2d'), {
+        type: 'bar',
+        data: {
+          labels: top.map(c => c.name),
+          datasets: [{
+            label: 'Revenue (฿)',
+            data: top.map(c => c.revenue),
+            backgroundColor: top.map(c => colorMap[c.primaryRep] || '#9e9e9e'),
+            borderRadius: 4
+          }]
+        },
+        options: {
+          indexAxis: 'y',
+          responsive: true, maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: ctx => '฿' + fmtNum(Math.round(ctx.parsed.x)),
+                afterLabel: ctx => 'Rep: ' + top[ctx.dataIndex].primaryRep + '  |  ' + top[ctx.dataIndex].txns + ' transactions'
+              }
+            }
+          },
+          scales: {
+            x: { beginAtZero: true, ticks: { callback: v => '฿' + fmtNum(Math.round(v)) } }
+          }
+        }
+      });
+
+      // Customer breakdown table
+      const tbody = document.getElementById('custTableBody');
+      custStats.forEach((c, i) => {
+        const dot = colorMap[c.primaryRep]
+          ? `<span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${colorMap[c.primaryRep]};margin-right:5px;vertical-align:middle"></span>`
+          : '';
+        const othersStr = c.allReps.filter(r => r !== c.primaryRep).join(', ') || '—';
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${i + 1}</td>
+          <td><strong>${c.name}</strong></td>
+          <td>${dot}<strong>${c.primaryRep}</strong></td>
+          <td style="font-size:12px;color:#666">${othersStr}</td>
+          <td>฿${fmtNum(Math.round(c.revenue))}</td>
+          <td>${c.txns}</td>
+          <td>${fmtNum(c.units)}</td>
+          <td>${c.topProduct}</td>
+        `;
+        tbody.appendChild(tr);
+      });
     }
 
     // --- Export ---

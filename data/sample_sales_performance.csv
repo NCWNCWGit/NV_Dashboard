@@ -1,0 +1,169 @@
+Date,Salesperson,Customer,Product,Category,Quantity,Unit_Price,Total_Value,Monthly_Target
+2026-01-05,John Smith,ABC Restaurant,Sugar 50kg,Staples,25,950.00,23750.00,150000
+2026-01-07,John Smith,Blue Kitchen,Cooking Oil 5L,Oil,50,220.00,11000.00,150000
+2026-01-10,John Smith,XYZ Hotel,Jasmine Rice 5kg,Staples,120,185.00,22200.00,150000
+2026-01-12,John Smith,ABC Restaurant,Canned Fish 48pk,Canned,35,480.00,16800.00,150000
+2026-01-15,John Smith,Blue Kitchen,Flour 25kg,Baking,70,420.00,29400.00,150000
+2026-01-20,John Smith,XYZ Hotel,Instant Noodles Case,Dry Goods,200,125.00,25000.00,150000
+2026-01-25,John Smith,ABC Restaurant,Detergent 20L,Cleaning,40,350.00,14000.00,150000
+2026-02-03,John Smith,Blue Kitchen,Sugar 50kg,Staples,20,950.00,19000.00,150000
+2026-02-07,John Smith,XYZ Hotel,Cooking Oil 5L,Oil,50,220.00,11000.00,150000
+2026-02-11,John Smith,ABC Restaurant,Flour 25kg,Baking,90,420.00,37800.00,150000
+2026-02-16,John Smith,Blue Kitchen,Jasmine Rice 5kg,Staples,80,185.00,14800.00,150000
+2026-02-20,John Smith,XYZ Hotel,Salt 25kg,Staples,100,280.00,28000.00,150000
+2026-02-24,John Smith,ABC Restaurant,Canned Fish 48pk,Canned,40,480.00,19200.00,150000
+2026-02-27,John Smith,Blue Kitchen,Instant Noodles Case,Dry Goods,160,125.00,20000.00,150000
+2026-03-04,John Smith,XYZ Hotel,Sugar 50kg,Staples,30,950.00,28500.00,150000
+2026-03-08,John Smith,ABC Restaurant,Cooking Oil 5L,Oil,70,220.00,15400.00,150000
+2026-03-12,John Smith,Blue Kitchen,Flour 25kg,Baking,60,420.00,25200.00,150000
+2026-03-16,John Smith,XYZ Hotel,Jasmine Rice 5kg,Staples,100,185.00,18500.00,150000
+2026-03-20,John Smith,ABC Restaurant,Instant Noodles Case,Dry Goods,180,125.00,22500.00,150000
+2026-03-24,John Smith,Blue Kitchen,Canned Fish 48pk,Canned,50,480.00,24000.00,150000
+2026-03-28,John Smith,XYZ Hotel,Detergent 20L,Cleaning,80,350.00,28000.00,150000
+2026-04-02,John Smith,ABC Restaurant,Sugar 50kg,Staples,20,950.00,19000.00,150000
+2026-04-07,John Smith,Blue Kitchen,Cooking Oil 5L,Oil,40,220.00,8800.00,150000
+2026-04-11,John Smith,XYZ Hotel,Jasmine Rice 5kg,Staples,70,185.00,12950.00,150000
+2026-04-16,John Smith,ABC Restaurant,Flour 25kg,Baking,50,420.00,21000.00,150000
+2026-04-22,John Smith,Blue Kitchen,Salt 25kg,Staples,80,280.00,22400.00,150000
+2026-04-25,John Smith,XYZ Hotel,Instant Noodles Case,Dry Goods,180,125.00,22500.00,150000
+2026-04-28,John Smith,ABC Restaurant,Canned Fish 48pk,Canned,30,480.00,14400.00,150000
+2026-05-05,John Smith,Blue Kitchen,Sugar 50kg,Staples,28,950.00,26600.00,150000
+2026-05-09,John Smith,XYZ Hotel,Cooking Oil 5L,Oil,65,220.00,14300.00,150000
+2026-05-13,John Smith,ABC Restaurant,Flour 25kg,Baking,75,420.00,31500.00,150000
+2026-05-17,John Smith,Blue Kitchen,Jasmine Rice 5kg,Staples,90,185.00,16650.00,150000
+2026-05-21,John Smith,XYZ Hotel,Canned Fish 48pk,Canned,45,480.00,21600.00,150000
+2026-05-25,John Smith,ABC Restaurant,Instant Noodles Case,Dry Goods,200,125.00,25000.00,150000
+2026-05-28,John Smith,Blue Kitchen,Detergent 20L,Cleaning,60,350.00,21000.00,150000
+2026-01-04,Sarah Lee,Green Cafe,Cooking Oil 5L,Oil,45,220.00,9900.00,120000
+2026-01-08,Sarah Lee,Sunrise Hotel,Sugar 50kg,Staples,22,950.00,20900.00,120000
+2026-01-12,Sarah Lee,Moonlight Bistro,Flour 25kg,Baking,55,420.00,23100.00,120000
+2026-01-16,Sarah Lee,Green Cafe,Jasmine Rice 5kg,Staples,90,185.00,16650.00,120000
+2026-01-20,Sarah Lee,Sunrise Hotel,Canned Fish 48pk,Canned,30,480.00,14400.00,120000
+2026-01-24,Sarah Lee,Moonlight Bistro,Instant Noodles Case,Dry Goods,100,125.00,12500.00,120000
+2026-01-28,Sarah Lee,Green Cafe,Salt 25kg,Staples,70,280.00,19600.00,120000
+2026-02-04,Sarah Lee,Sunrise Hotel,Cooking Oil 5L,Oil,55,220.00,12100.00,120000
+2026-02-08,Sarah Lee,Moonlight Bistro,Sugar 50kg,Staples,20,950.00,19000.00,120000
+2026-02-12,Sarah Lee,Green Cafe,Jasmine Rice 5kg,Staples,100,185.00,18500.00,120000
+2026-02-16,Sarah Lee,Sunrise Hotel,Flour 25kg,Baking,40,420.00,16800.00,120000
+2026-02-20,Sarah Lee,Moonlight Bistro,Canned Fish 48pk,Canned,25,480.00,12000.00,120000
+2026-02-24,Sarah Lee,Green Cafe,Detergent 20L,Cleaning,50,350.00,17500.00,120000
+2026-02-26,Sarah Lee,Sunrise Hotel,Instant Noodles Case,Dry Goods,120,125.00,15000.00,120000
+2026-03-03,Sarah Lee,Moonlight Bistro,Cooking Oil 5L,Oil,50,220.00,11000.00,120000
+2026-03-07,Sarah Lee,Green Cafe,Sugar 50kg,Staples,25,950.00,23750.00,120000
+2026-03-11,Sarah Lee,Sunrise Hotel,Flour 25kg,Baking,60,420.00,25200.00,120000
+2026-03-15,Sarah Lee,Moonlight Bistro,Jasmine Rice 5kg,Staples,110,185.00,20350.00,120000
+2026-03-19,Sarah Lee,Green Cafe,Salt 25kg,Staples,80,280.00,22400.00,120000
+2026-03-23,Sarah Lee,Sunrise Hotel,Canned Fish 48pk,Canned,28,480.00,13440.00,120000
+2026-03-27,Sarah Lee,Moonlight Bistro,Instant Noodles Case,Dry Goods,90,125.00,11250.00,120000
+2026-04-03,Sarah Lee,Green Cafe,Cooking Oil 5L,Oil,60,220.00,13200.00,120000
+2026-04-08,Sarah Lee,Sunrise Hotel,Sugar 50kg,Staples,18,950.00,17100.00,120000
+2026-04-14,Sarah Lee,Moonlight Bistro,Flour 25kg,Baking,45,420.00,18900.00,120000
+2026-04-18,Sarah Lee,Green Cafe,Jasmine Rice 5kg,Staples,80,185.00,14800.00,120000
+2026-04-22,Sarah Lee,Sunrise Hotel,Canned Fish 48pk,Canned,35,480.00,16800.00,120000
+2026-04-26,Sarah Lee,Moonlight Bistro,Detergent 20L,Cleaning,55,350.00,19250.00,120000
+2026-04-29,Sarah Lee,Green Cafe,Instant Noodles Case,Dry Goods,130,125.00,16250.00,120000
+2026-05-04,Sarah Lee,Sunrise Hotel,Cooking Oil 5L,Oil,70,220.00,15400.00,120000
+2026-05-08,Sarah Lee,Moonlight Bistro,Sugar 50kg,Staples,24,950.00,22800.00,120000
+2026-05-12,Sarah Lee,Green Cafe,Flour 25kg,Baking,65,420.00,27300.00,120000
+2026-05-16,Sarah Lee,Sunrise Hotel,Jasmine Rice 5kg,Staples,95,185.00,17575.00,120000
+2026-05-20,Sarah Lee,Moonlight Bistro,Canned Fish 48pk,Canned,38,480.00,18240.00,120000
+2026-05-24,Sarah Lee,Green Cafe,Salt 25kg,Staples,75,280.00,21000.00,120000
+2026-05-28,Sarah Lee,Sunrise Hotel,Instant Noodles Case,Dry Goods,110,125.00,13750.00,120000
+2026-01-06,Mike Chen,River View Restaurant,Cooking Oil 5L,Oil,40,220.00,8800.00,100000
+2026-01-09,Mike Chen,Central Kitchen,Sugar 50kg,Staples,18,950.00,17100.00,100000
+2026-01-13,Mike Chen,ABC Restaurant,Flour 25kg,Baking,40,420.00,16800.00,100000
+2026-01-17,Mike Chen,River View Restaurant,Jasmine Rice 5kg,Staples,80,185.00,14800.00,100000
+2026-01-21,Mike Chen,Central Kitchen,Canned Fish 48pk,Canned,22,480.00,10560.00,100000
+2026-01-25,Mike Chen,ABC Restaurant,Salt 25kg,Staples,50,280.00,14000.00,100000
+2026-02-05,Mike Chen,Central Kitchen,Cooking Oil 5L,Oil,45,220.00,9900.00,100000
+2026-02-09,Mike Chen,River View Restaurant,Sugar 50kg,Staples,20,950.00,19000.00,100000
+2026-02-13,Mike Chen,ABC Restaurant,Flour 25kg,Baking,50,420.00,21000.00,100000
+2026-02-17,Mike Chen,Central Kitchen,Jasmine Rice 5kg,Staples,60,185.00,11100.00,100000
+2026-02-21,Mike Chen,River View Restaurant,Instant Noodles Case,Dry Goods,100,125.00,12500.00,100000
+2026-02-25,Mike Chen,ABC Restaurant,Detergent 20L,Cleaning,40,350.00,14000.00,100000
+2026-03-05,Mike Chen,River View Restaurant,Sugar 50kg,Staples,22,950.00,20900.00,100000
+2026-03-09,Mike Chen,Central Kitchen,Cooking Oil 5L,Oil,48,220.00,10560.00,100000
+2026-03-13,Mike Chen,ABC Restaurant,Jasmine Rice 5kg,Staples,90,185.00,16650.00,100000
+2026-03-17,Mike Chen,River View Restaurant,Canned Fish 48pk,Canned,28,480.00,13440.00,100000
+2026-03-21,Mike Chen,Central Kitchen,Flour 25kg,Baking,50,420.00,21000.00,100000
+2026-03-25,Mike Chen,ABC Restaurant,Instant Noodles Case,Dry Goods,120,125.00,15000.00,100000
+2026-04-04,Mike Chen,Central Kitchen,Cooking Oil 5L,Oil,35,220.00,7700.00,100000
+2026-04-09,Mike Chen,River View Restaurant,Sugar 50kg,Staples,14,950.00,13300.00,100000
+2026-04-14,Mike Chen,ABC Restaurant,Jasmine Rice 5kg,Staples,60,185.00,11100.00,100000
+2026-04-19,Mike Chen,Central Kitchen,Salt 25kg,Staples,50,280.00,14000.00,100000
+2026-04-24,Mike Chen,River View Restaurant,Canned Fish 48pk,Canned,18,480.00,8640.00,100000
+2026-04-26,Mike Chen,ABC Restaurant,Flour 25kg,Baking,40,420.00,16800.00,100000
+2026-04-28,Mike Chen,Central Kitchen,Instant Noodles Case,Dry Goods,100,125.00,12500.00,100000
+2026-05-06,Mike Chen,River View Restaurant,Sugar 50kg,Staples,22,950.00,20900.00,100000
+2026-05-10,Mike Chen,Central Kitchen,Cooking Oil 5L,Oil,50,220.00,11000.00,100000
+2026-05-14,Mike Chen,ABC Restaurant,Flour 25kg,Baking,55,420.00,23100.00,100000
+2026-05-18,Mike Chen,River View Restaurant,Jasmine Rice 5kg,Staples,80,185.00,14800.00,100000
+2026-05-22,Mike Chen,Central Kitchen,Canned Fish 48pk,Canned,25,480.00,12000.00,100000
+2026-05-26,Mike Chen,ABC Restaurant,Salt 25kg,Staples,60,280.00,16800.00,100000
+2026-05-29,Mike Chen,River View Restaurant,Detergent 20L,Cleaning,40,350.00,14000.00,100000
+2026-01-03,Emma Wilson,XYZ Hotel,Sugar 50kg,Staples,28,950.00,26600.00,130000
+2026-01-07,Emma Wilson,Blue Kitchen,Cooking Oil 5L,Oil,55,220.00,12100.00,130000
+2026-01-11,Emma Wilson,Sunrise Hotel,Flour 25kg,Baking,65,420.00,27300.00,130000
+2026-01-15,Emma Wilson,XYZ Hotel,Jasmine Rice 5kg,Staples,100,185.00,18500.00,130000
+2026-01-19,Emma Wilson,Blue Kitchen,Canned Fish 48pk,Canned,38,480.00,18240.00,130000
+2026-01-23,Emma Wilson,Sunrise Hotel,Instant Noodles Case,Dry Goods,150,125.00,18750.00,130000
+2026-01-27,Emma Wilson,XYZ Hotel,Salt 25kg,Staples,80,280.00,22400.00,130000
+2026-02-04,Emma Wilson,Blue Kitchen,Sugar 50kg,Staples,20,950.00,19000.00,130000
+2026-02-08,Emma Wilson,Sunrise Hotel,Cooking Oil 5L,Oil,50,220.00,11000.00,130000
+2026-02-12,Emma Wilson,XYZ Hotel,Flour 25kg,Baking,55,420.00,23100.00,130000
+2026-02-16,Emma Wilson,Blue Kitchen,Jasmine Rice 5kg,Staples,90,185.00,16650.00,130000
+2026-02-20,Emma Wilson,Sunrise Hotel,Canned Fish 48pk,Canned,30,480.00,14400.00,130000
+2026-02-24,Emma Wilson,XYZ Hotel,Instant Noodles Case,Dry Goods,140,125.00,17500.00,130000
+2026-02-27,Emma Wilson,Blue Kitchen,Detergent 20L,Cleaning,60,350.00,21000.00,130000
+2026-03-03,Emma Wilson,Sunrise Hotel,Sugar 50kg,Staples,32,950.00,30400.00,130000
+2026-03-07,Emma Wilson,XYZ Hotel,Cooking Oil 5L,Oil,60,220.00,13200.00,130000
+2026-03-11,Emma Wilson,Blue Kitchen,Flour 25kg,Baking,70,420.00,29400.00,130000
+2026-03-15,Emma Wilson,Sunrise Hotel,Jasmine Rice 5kg,Staples,110,185.00,20350.00,130000
+2026-03-19,Emma Wilson,XYZ Hotel,Canned Fish 48pk,Canned,40,480.00,19200.00,130000
+2026-03-23,Emma Wilson,Blue Kitchen,Salt 25kg,Staples,90,280.00,25200.00,130000
+2026-03-27,Emma Wilson,Sunrise Hotel,Instant Noodles Case,Dry Goods,160,125.00,20000.00,130000
+2026-04-02,Emma Wilson,XYZ Hotel,Sugar 50kg,Staples,25,950.00,23750.00,130000
+2026-04-06,Emma Wilson,Blue Kitchen,Cooking Oil 5L,Oil,52,220.00,11440.00,130000
+2026-04-11,Emma Wilson,Sunrise Hotel,Flour 25kg,Baking,60,420.00,25200.00,130000
+2026-04-16,Emma Wilson,XYZ Hotel,Jasmine Rice 5kg,Staples,90,185.00,16650.00,130000
+2026-04-20,Emma Wilson,Blue Kitchen,Canned Fish 48pk,Canned,35,480.00,16800.00,130000
+2026-04-24,Emma Wilson,Sunrise Hotel,Instant Noodles Case,Dry Goods,140,125.00,17500.00,130000
+2026-04-28,Emma Wilson,XYZ Hotel,Detergent 20L,Cleaning,60,350.00,21000.00,130000
+2026-05-03,Emma Wilson,Blue Kitchen,Sugar 50kg,Staples,30,950.00,28500.00,130000
+2026-05-07,Emma Wilson,Sunrise Hotel,Cooking Oil 5L,Oil,65,220.00,14300.00,130000
+2026-05-11,Emma Wilson,XYZ Hotel,Flour 25kg,Baking,75,420.00,31500.00,130000
+2026-05-15,Emma Wilson,Blue Kitchen,Jasmine Rice 5kg,Staples,115,185.00,21275.00,130000
+2026-05-19,Emma Wilson,Sunrise Hotel,Canned Fish 48pk,Canned,42,480.00,20160.00,130000
+2026-05-23,Emma Wilson,XYZ Hotel,Salt 25kg,Staples,95,280.00,26600.00,130000
+2026-05-27,Emma Wilson,Blue Kitchen,Instant Noodles Case,Dry Goods,165,125.00,20625.00,130000
+2026-01-06,Tom Brown,Moonlight Bistro,Cooking Oil 5L,Oil,35,220.00,7700.00,90000
+2026-01-10,Tom Brown,Green Cafe,Sugar 50kg,Staples,15,950.00,14250.00,90000
+2026-01-14,Tom Brown,Central Kitchen,Flour 25kg,Baking,40,420.00,16800.00,90000
+2026-01-18,Tom Brown,Moonlight Bistro,Jasmine Rice 5kg,Staples,70,185.00,12950.00,90000
+2026-01-22,Tom Brown,Green Cafe,Canned Fish 48pk,Canned,18,480.00,8640.00,90000
+2026-01-26,Tom Brown,Central Kitchen,Instant Noodles Case,Dry Goods,80,125.00,10000.00,90000
+2026-02-03,Tom Brown,Green Cafe,Cooking Oil 5L,Oil,40,220.00,8800.00,90000
+2026-02-07,Tom Brown,Central Kitchen,Sugar 50kg,Staples,16,950.00,15200.00,90000
+2026-02-11,Tom Brown,Moonlight Bistro,Flour 25kg,Baking,45,420.00,18900.00,90000
+2026-02-15,Tom Brown,Green Cafe,Jasmine Rice 5kg,Staples,75,185.00,13875.00,90000
+2026-02-19,Tom Brown,Central Kitchen,Canned Fish 48pk,Canned,20,480.00,9600.00,90000
+2026-02-23,Tom Brown,Moonlight Bistro,Salt 25kg,Staples,55,280.00,15400.00,90000
+2026-03-04,Tom Brown,Central Kitchen,Sugar 50kg,Staples,18,950.00,17100.00,90000
+2026-03-08,Tom Brown,Moonlight Bistro,Cooking Oil 5L,Oil,38,220.00,8360.00,90000
+2026-03-12,Tom Brown,Green Cafe,Flour 25kg,Baking,42,420.00,17640.00,90000
+2026-03-16,Tom Brown,Central Kitchen,Jasmine Rice 5kg,Staples,70,185.00,12950.00,90000
+2026-03-20,Tom Brown,Moonlight Bistro,Canned Fish 48pk,Canned,20,480.00,9600.00,90000
+2026-03-24,Tom Brown,Green Cafe,Instant Noodles Case,Dry Goods,90,125.00,11250.00,90000
+2026-03-28,Tom Brown,Central Kitchen,Detergent 20L,Cleaning,35,350.00,12250.00,90000
+2026-04-05,Tom Brown,Moonlight Bistro,Cooking Oil 5L,Oil,28,220.00,6160.00,90000
+2026-04-09,Tom Brown,Green Cafe,Sugar 50kg,Staples,12,950.00,11400.00,90000
+2026-04-13,Tom Brown,Central Kitchen,Jasmine Rice 5kg,Staples,55,185.00,10175.00,90000
+2026-04-17,Tom Brown,Moonlight Bistro,Flour 25kg,Baking,30,420.00,12600.00,90000
+2026-04-21,Tom Brown,Green Cafe,Salt 25kg,Staples,45,280.00,12600.00,90000
+2026-04-25,Tom Brown,Central Kitchen,Instant Noodles Case,Dry Goods,70,125.00,8750.00,90000
+2026-05-05,Tom Brown,Green Cafe,Sugar 50kg,Staples,20,950.00,19000.00,90000
+2026-05-09,Tom Brown,Central Kitchen,Cooking Oil 5L,Oil,42,220.00,9240.00,90000
+2026-05-13,Tom Brown,Moonlight Bistro,Flour 25kg,Baking,48,420.00,20160.00,90000
+2026-05-17,Tom Brown,Green Cafe,Jasmine Rice 5kg,Staples,72,185.00,13320.00,90000
+2026-05-21,Tom Brown,Central Kitchen,Canned Fish 48pk,Canned,22,480.00,10560.00,90000
+2026-05-25,Tom Brown,Moonlight Bistro,Salt 25kg,Staples,55,280.00,15400.00,90000
